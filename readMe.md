@@ -1,9 +1,8 @@
 Dummy server to update CSV file of persons.
 
-Run:
+NPM modules:
 
-	npm init
-	npm install "convert-array-to-csv"
-	npm install "csv-parse"
-	npm install "body-parser"
-	npm install "expres"
+	"convert-array-to-csv"
+	"csv-parse"
+	"body-parser"
+	"expres"
