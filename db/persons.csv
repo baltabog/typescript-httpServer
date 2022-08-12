@@ -1,5 +1,5 @@
 id,firstName,secoundName,genre
-1,Ion,A,0
-2,Ana,B,1
-3,Maria,C,1
-4,Vasile,D,0
+1,Ion,A,M
+2,Ana,B,F
+3,Maria,C,F
+4,Vasile,D,M

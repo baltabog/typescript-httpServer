@@ -2,7 +2,6 @@ import { Express } from 'express';
 import { AbstractCrudApi } from '../abstract/abstractCrudApi';
 import PersonDao from './dao';
 import Person from './entity';
-import { Genre } from './genre';
 
 export default class CSVPersonApi extends AbstractCrudApi<Person, PersonDao> {
 
@@ -15,6 +14,6 @@ export default class CSVPersonApi extends AbstractCrudApi<Person, PersonDao> {
     }
 
     mapToEntity(map: any): Person {
-        return new Person(map.id, map.firstName, map.secoundName, Genre.getGenreFromString(map.genre));
+        return new Person(map.id, map.firstName, map.secoundName, map.genre);
     }
 }
