@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "36ffad29-1db7-47fd-b560-b4e25db7bc83",
+		"name": "HttpServer-base",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET: /csv/persons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:7678/csv/persons",
+					"host": [
+						"localhost"
+					],
+					"port": "7678",
+					"path": [
+						"csv",
+						"persons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET: /csv/persons/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:7678/csv/persons/2",
+					"host": [
+						"localhost"
+					],
+					"port": "7678",
+					"path": [
+						"csv",
+						"persons",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST: /csv/persons",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"5\",\r\n    \"firstName\": \"Diana\",\r\n    \"secoundName\": \"F\",\r\n    \"genre\": \"sada\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:7678/csv/persons",
+					"host": [
+						"localhost"
+					],
+					"port": "7678",
+					"path": [
+						"csv",
+						"persons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT: /csv/persons",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"5\",\r\n    \"firstName\": \"Diana\",\r\n    \"secoundName\": \"F\",\r\n    \"genre\": \"F\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:7678/csv/persons",
+					"host": [
+						"localhost"
+					],
+					"port": "7678",
+					"path": [
+						"csv",
+						"persons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE: /csv/persons/(id)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"5\",\r\n    \"firstName\": \"Diana\",\r\n    \"secoundName\": \"F\",\r\n    \"genre\": \"F\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:7678/csv/persons/5",
+					"host": [
+						"localhost"
+					],
+					"port": "7678",
+					"path": [
+						"csv",
+						"persons",
+						"5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
