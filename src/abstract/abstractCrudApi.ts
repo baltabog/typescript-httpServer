@@ -101,7 +101,4 @@ export abstract class AbstractCrudApi<E extends AbstractEntity, D extends Dao<E>
 
         console.log(req.method + ":" + req.url + " --> " + statusCode);
     }
-
-    
-
 }

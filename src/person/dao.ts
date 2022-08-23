@@ -13,7 +13,7 @@ export default class CVSPersonDao extends CVSEntitiesDao<Person> {
     }
 
     protected getCsvHeaders(): string[] {
-        return ["id", "firstName", "secoundName", "genre"];
+        return ["id", "firstName", "secondName", "genre"];
     }
 
 }
