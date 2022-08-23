@@ -32,7 +32,7 @@ export abstract class CVSEntitiesDao<E extends AbstractEntity> implements Dao<E>
     }
         
     getAll(): E[] {
-        return this.entities
+        return this.getEntitiesArrClone();
     }
 
     getById(id: string): E {
@@ -43,9 +43,9 @@ export abstract class CVSEntitiesDao<E extends AbstractEntity> implements Dao<E>
         var beforeActionLength = this.entities.length;
         var clonedEntitiesArr = this.getEntitiesArrClone();
         var afterActionLength = clonedEntitiesArr.push(entity);
-        this.doAfterEntitiesChange(clonedEntitiesArr);
         
-        return beforeActionLength < afterActionLength
+        return beforeActionLength < afterActionLength && 
+            CVSEntitiesDao.saveOnFile(this.getCsvFilePath(), clonedEntitiesArr, this.entities);
     }
 
     update(entity: E): boolean {
@@ -53,12 +53,16 @@ export abstract class CVSEntitiesDao<E extends AbstractEntity> implements Dao<E>
         var clonedEntitiesArr = this.getEntitiesArrClone();
         clonedEntitiesArr = clonedEntitiesArr.map(arrEntity => arrEntity.id !== entity.id ? arrEntity : entity);
         var afterActionLength = clonedEntitiesArr.length;
-        this.doAfterEntitiesChange(clonedEntitiesArr);
 
-        return beforeActionLength < afterActionLength;
+        return beforeActionLength === afterActionLength && 
+            CVSEntitiesDao.saveOnFile(this.getCsvFilePath(), clonedEntitiesArr, this.entities);
     }
 
     delete(entity: E): boolean {
+        if (!entity) {
+            return false;
+        }
+
         var idx = -1;
         for (var i=0; i<this.entities.length; ++i) {
             if (entity.id == this.entities[i].id) {
@@ -70,8 +74,8 @@ export abstract class CVSEntitiesDao<E extends AbstractEntity> implements Dao<E>
         if (idx > -1) {
             const clonedEntitiesArr = this.getEntitiesArrClone();
             clonedEntitiesArr.splice(idx, 1);
-            this.doAfterEntitiesChange(clonedEntitiesArr);
-            return true;
+            
+            return CVSEntitiesDao.saveOnFile(this.getCsvFilePath(), clonedEntitiesArr, this.entities);
         }
 
         return false;
@@ -80,25 +84,29 @@ export abstract class CVSEntitiesDao<E extends AbstractEntity> implements Dao<E>
     protected abstract getCsvFilePath(): string
     protected abstract getCsvHeaders(): string[]
 
-    private doAfterEntitiesChange(newEntitiesArr: E[]): void {
-        const { convertArrayToCSV } = require('convert-array-to-csv');
-        const fs = require('fs');
-        fs.writeFile(this.getCsvFilePath(), convertArrayToCSV(newEntitiesArr), function(err: string) {
-            if (err) {
-                return console.error(err);
-            }
-            console.log("CSV updated");
-        });
-        // remove all from entities
-        this.entities.splice(0, this.entities.length);
-        // add all array elements to entities
-        newEntitiesArr.forEach(val => this.entities.push(Object.assign({}, val)));
-    }
-
     private getEntitiesArrClone(): E[] {
         const myClonedArray: E[] = [];
         this.entities.forEach (val => myClonedArray.push(val));
 
         return myClonedArray;
+    }
+
+    static saveOnFile(csvFilePath: string, newEntitiesArr: any[], savedEntitiesArr: any[]): boolean {
+        const { convertArrayToCSV } = require('convert-array-to-csv');
+        
+        try {
+            require('fs').writeFileSync(csvFilePath, convertArrayToCSV(newEntitiesArr))
+            
+            console.log("CSV updated");
+            // remove all from entities
+            savedEntitiesArr.splice(0, savedEntitiesArr.length);
+            // add all array elements to entities
+            newEntitiesArr.forEach(val => savedEntitiesArr.push(val));
+
+            return true;
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
     }
 }

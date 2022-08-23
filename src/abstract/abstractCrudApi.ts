@@ -9,11 +9,11 @@ export abstract class AbstractCrudApi<E extends AbstractEntity, D extends Dao<E>
         // generic API to get all entities 
         this.server.get(this.getBasePath(), (req, res) => {
             if (req.url != this.getBasePath()) {
-                this.sendResponse(req, res, 404)
-                return
+                this.sendResponse(req, res, 404);
+                return;
             }
             
-            this.sendResponse(req, res, 200, this.dao.getAll())
+            this.sendResponse(req, res, 200, this.dao.getAll());
         })
 
         // generic API to get entity by id 
@@ -27,11 +27,11 @@ export abstract class AbstractCrudApi<E extends AbstractEntity, D extends Dao<E>
 
             var entity = this.dao.getById(id);
             if (!entity) {
-                this.sendResponse(req, res, 204)
-                return
+                this.sendResponse(req, res, 204);
+                return;
             }
 
-            this.sendResponse(req, res, 200, entity)
+            this.sendResponse(req, res, 200, entity);
         })
 
         // generic API to create an entity
@@ -47,9 +47,12 @@ export abstract class AbstractCrudApi<E extends AbstractEntity, D extends Dao<E>
                 return
             }
 
-            this.dao.add(entityReceipt);
-
-            this.sendResponse(req, res, 201, entityReceipt)
+            if (this.dao.add(entityReceipt)) {
+                this.sendResponse(req, res, 201, entityReceipt);
+                return;
+            }
+            
+            this.sendResponse(req, res, 500);
         })
 
         // generic API to update an entity (all fields, except id will be replaced with received values)
@@ -65,9 +68,12 @@ export abstract class AbstractCrudApi<E extends AbstractEntity, D extends Dao<E>
                 return
             } 
 
-            this.dao.update(entityReceipt);
-
-            this.sendResponse(req, res, 200, entityReceipt)
+            if (this.dao.update(entityReceipt)) {
+                this.sendResponse(req, res, 200, entityReceipt);
+                return;
+            }
+        
+            this.sendResponse(req, res, 500);
         })
 
         // generic API to delete an entity by id
@@ -79,9 +85,18 @@ export abstract class AbstractCrudApi<E extends AbstractEntity, D extends Dao<E>
                 return
             }
 
-            this.dao.delete(this.dao.getById(id));
+            const entity = this.dao.getById(id);
+            if (!entity) {
+                this.sendResponse(req, res, 404);
+                return;
+            }
 
-            this.sendResponse(req, res, 202)
+            if (this.dao.delete(entity)) {
+                this.sendResponse(req, res, 202);
+                return;
+            }
+
+            this.sendResponse(req, res, 500);
         })
     }
     
